@@ -45,5 +45,5 @@ public class Post {
         return instances.get(id-1); //why minus 1? See if you can figure it out.
     }
 
-
 }
+

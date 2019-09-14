@@ -8,12 +8,13 @@ import spark.template.handlebars.HandlebarsTemplateEngine;
 import static spark.Spark.*;
 
 public class App {
-    public static void main(String[] args) {
+    public static void main(String[] args) { //type “psvm + tab” to autocreate this
         staticFileLocation("/public");
 
-        get("/", (request, response) -> {
-            Map<String, Object> model = new HashMap<String, Object>();
-            return new ModelAndView(model, "index.hbs");
+        //get: show new post form
+        get("/posts/new", (req, res) -> {
+            Map<String, Object> model = new HashMap<>();
+            return new ModelAndView(model, "newpost-form.hbs");
         }, new HandlebarsTemplateEngine());
 
         //post: process new post form
@@ -45,5 +46,14 @@ public class App {
 
         //get: delete all posts
 
+        get("/posts/:id", (req, res) -> {
+            Map<String, Object> model = new HashMap<>();
+            int idOfPostToFind = Integer.parseInt(req.params(":id")); //pull id - must match route segment
+            Post foundPost = Post.findById(idOfPostToFind); //use it to find post
+            model.put("post", foundPost); //add it to model for template to display
+            return new ModelAndView(model, "post-detail.hbs"); //individual post page.
+        }, new HandlebarsTemplateEngine());
+
     }
+
 }
